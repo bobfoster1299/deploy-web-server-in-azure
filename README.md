@@ -1,1 +1,4 @@
-This repo contains the starter materials for projects from the Udacity Azure Cloud DevOps Nanodegree Program.
+POLICY
+
+Create policy definitition:
+az policy definition create --name tagging-policy --rules policy.json
