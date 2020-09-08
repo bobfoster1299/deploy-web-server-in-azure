@@ -1,23 +1,11 @@
 {
-  "type": "Microsoft.Authorization/policyDefinitions",
-  "name": "tagging-policy",
-  "properties": {
-    "mode": "indexed",
-    "displayName": "Deny the creation of resources that do not have tags",
-    "description": "Deny the creation of resources that do not have tags",
-    "policyRule": {
-      "if": {
-        "allof": [
-          {
-            "field": "[concat('tags[', parameters('tagName'), ']')]",
-            "exists": "false"
-          }
-        ]
-      },
-      "then": {
-        "effect": "deny"
-      }
+  "if": {
+    "not": {
+      "field": "[concat('tags[', parameters('tagName'), ']')]",
+      "exists": "false"
     }
+  },
+  "then": {
+    "effect": "deny"
   }
- 
 }
