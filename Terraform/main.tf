@@ -124,6 +124,7 @@ resource "azurerm_lb" "main" {
     frontend_ip_configuration_name = "${var.prefix}-lbfrontend"
     backend_address_pool_id        = azurerm_lb_backend_address_pool.main.id
   }
+}
 
 
 
