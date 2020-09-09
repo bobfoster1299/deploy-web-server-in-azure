@@ -33,33 +33,38 @@ resource "azurerm_network_security_group" "main" {
   name                = "${var.prefix}-nsg"
   location            = azurerm_resource_group.main.location
   resource_group_name = azurerm_resource_group.main.name
+}
 
 
-  # HTTP access from Rob PC
-  security_rule {
-    name                       = "Port80FromRobPC"
-    priority                   = 120
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "TCP"
-    source_port_range          = "*"
-    destination_port_range     = "80"
-    source_address_prefix      = "146.200.28.185/32"
-    destination_address_prefix = "*"
-  }
+# HTTP access from Rob PC
+resource "azurerm_network_security_rule" "http" {
+  name                        = "Port80FromRobPC"
+  priority                    = 120
+  direction                  = "Inbound"
+  access                     = "Allow"
+  protocol                   = "TCP"
+  source_port_range          = "*"
+  destination_port_range     = "80"
+  source_address_prefix      = "146.200.28.185/32"
+  destination_address_prefix = "*"
+  resource_group_name         = azurerm_resource_group.main.name
+  network_security_group_name = azurerm_network_security_group.main.name
+}
 
-  # SSH access from Rob PC
-  security_rule {
-    name                       = "Port22FromRobPC"
-    priority                   = 130
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "TCP"
-    source_port_range          = "*"
-    destination_port_range     = "22"
-    source_address_prefix      = "146.200.28.185/32"
-    destination_address_prefix = "*"
-  }
+
+# SSH access from Rob PC
+resource "azurerm_network_security_rule" "ssh" {
+  name                        = "Port22FromRobPC"
+  priority                    = 130
+  direction                  = "Inbound"
+  access                     = "Allow"
+  protocol                   = "TCP"
+  source_port_range          = "*"
+  destination_port_range     = "22"
+  source_address_prefix      = "146.200.28.185/32"
+  destination_address_prefix = "*"
+  resource_group_name         = azurerm_resource_group.main.name
+  network_security_group_name = azurerm_network_security_group.main.name
 }
 
 
