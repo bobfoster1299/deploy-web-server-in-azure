@@ -198,6 +198,6 @@ resource "azurerm_network_interface" "main" {
 
 resource "azurerm_network_interface_backend_address_pool_association" "main" {
   network_interface_id    = azurerm_network_interface.main.id
-  ip_configuration_name   = "${var.prefix}-backendpool"
+  ip_configuration_name   = azurerm_network_interface.main.ip_configuration[0]
   backend_address_pool_id = azurerm_lb_backend_address_pool.main.id
 }
