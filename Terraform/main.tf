@@ -68,7 +68,6 @@ resource "azurerm_availability_set" "main" {
   resource_group_name          = azurerm_resource_group.main.name
   platform_fault_domain_count  = 2
   platform_update_domain_count = 5
-
 }
 
 
@@ -196,3 +195,9 @@ resource "azurerm_network_interface" "main" {
 }
 
 
+
+resource "azurerm_network_interface_backend_address_pool_association" "main" {
+  network_interface_id    = azurerm_network_interface.main.id
+  ip_configuration_name   = "${var.prefix}-backendpool"
+  backend_address_pool_id = azurerm_lb_backend_address_pool.main.id
+}

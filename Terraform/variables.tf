@@ -27,4 +27,3 @@ variable "subnet" {
   description = "Subnet address space"
   default     = "10.4.0.0/24"
 }
-
