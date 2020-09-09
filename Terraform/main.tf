@@ -179,11 +179,22 @@ resource "azurerm_linux_virtual_machine" "main" {
 
 
 # Data disk
-resource "azure_data_disk" "data" {
-  lun                  = 0
-  size                 = 10
-  storage_service_name = "${var.prefix}-datadisk"
-  virtual_machine      = "${var.prefix}-vm"
+resource "azurerm_managed_disk" "main" {
+  name                 = "${var.prefix}-datadisk"
+  location             = azurerm_resource_group.main.location
+  resource_group_name  = azurerm_resource_group.main.name
+  storage_account_type = "Standard_LRS"
+  create_option        = "Empty"
+  disk_size_gb         = 10
+}
+
+
+# Data disk attachment
+resource "azurerm_virtual_machine_data_disk_attachment" "main" {
+  managed_disk_id    = azurerm_managed_disk.main.id
+  virtual_machine_id = azurerm_virtual_machine.main.id
+  lun                = "0"
+  caching            = "ReadWrite"
 }
 
 
