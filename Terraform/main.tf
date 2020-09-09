@@ -24,7 +24,7 @@ resource "azurerm_subnet" "internal" {
 
 #NSG
 resource "azurerm_network_security_group" "nsg" {
-  name                = "acceptanceTestSecurityGroup1"
+  name                = "${var.prefix}-nsg1"
   location            = azurerm_resource_group.main.location
   resource_group_name = azurerm_resource_group.main.name
 
