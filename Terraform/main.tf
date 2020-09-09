@@ -47,6 +47,19 @@ resource "azurerm_network_security_group" "main" {
     source_address_prefix      = "146.200.28.185/32"
     destination_address_prefix = "*"
   }
+
+  # SSH access from Rob PC
+  security_rule {
+    name                       = "Port22FromRobPC"
+    priority                   = 130
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "TCP"
+    source_port_range          = "*"
+    destination_port_range     = "22"
+    source_address_prefix      = "146.200.28.185/32"
+    destination_address_prefix = "*"
+  }
 }
 
 
@@ -83,6 +96,7 @@ resource "azurerm_lb" "main" {
     public_ip_address_id = azurerm_public_ip.main.id
   }
 }
+
 
 # Backend address pool
  resource "azurerm_lb_backend_address_pool" "main" {
@@ -139,26 +153,6 @@ resource "azurerm_linux_virtual_machine" "main" {
     storage_account_type = "Standard_LRS"
     caching              = "ReadWrite"
   }
-
-  # virtual machine os profile
-  #os_profile {
-  #  computer_name  = "${var.prefix}-vm1"
-  #  admin_username = var.admin_username
-  #  admin_password = var.admin_password
-  #}
-
-  # virtual machine os profile linux config
-  #os_profile_linux_config {
-  #  disable_password_authentication = "False"
-  #}
-
-  
-  #storage_data_disk {
-  #  name              = "${var.prefix}-datadisk"
-  #  create_option     = "Empty"
-  #  managed_disk_type = "Standard_LRS"
-  #}
-
 }
 
 
