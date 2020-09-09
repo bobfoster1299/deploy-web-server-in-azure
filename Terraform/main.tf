@@ -55,6 +55,7 @@ resource "azurerm_network_interface" "main" {
   }
 }
 
+# NEED TO ASSOCIATE IP WITH NIC
 resource "azurerm_public_ip" "public_ip" {
   name                = "public_ip"
   resource_group_name = azurerm_resource_group.main.name
@@ -66,6 +67,76 @@ resource "azurerm_public_ip" "public_ip" {
   #}
 }
 
+
+
+/*
+#SCALE SET
+resource "azurerm_virtual_machine_scale_set" "main" {
+  name                = "${var.prefix}-scaleset1"
+  location            = azurerm_resource_group.main.location
+  resource_group_name = azurerm_resource_group.main.name
+
+  # automatic rolling upgrade
+  automatic_os_upgrade = true
+  upgrade_policy_mode  = "Rolling"
+
+  rolling_upgrade_policy {
+    max_batch_instance_percent              = 20
+    max_unhealthy_instance_percent          = 20
+    max_unhealthy_upgraded_instance_percent = 5
+    pause_time_between_batches              = "PT0S"
+  }
+
+  # required when using rolling upgrade policy
+  health_probe_id = azurerm_lb_probe.example.id
+
+  sku {
+    name     = "Standard_F2"
+    tier     = "Standard"
+    capacity = 2
+  }
+
+  storage_profile_image_reference {
+    publisher = "Canonical"
+    offer     = "UbuntuServer"
+    sku       = "16.04-LTS"
+    version   = "latest"
+  }
+
+  storage_profile_os_disk {
+    name              = ""
+    caching           = "ReadWrite"
+    create_option     = "FromImage"
+    managed_disk_type = "Standard_LRS"
+  }
+
+  storage_profile_data_disk {
+    lun           = 0
+    caching       = "ReadWrite"
+    create_option = "Empty"
+    disk_size_gb  = 10
+  }
+
+  os_profile {
+    computer_name_prefix = "testvm"
+    admin_username       = "myadmin"
+  }
+
+  os_profile_linux_config {
+    disable_password_authentication = true
+
+    ssh_keys {
+      path     = "/home/myadmin/.ssh/authorized_keys"
+      key_data = file("~/.ssh/demo_key.pub")
+    }
+  }
+*/
+
+
+
+
+
+/*
 resource "azurerm_linux_virtual_machine" "main" {
   name                            = "${var.prefix}-vm"
   resource_group_name             = azurerm_resource_group.main.name
@@ -91,4 +162,8 @@ resource "azurerm_linux_virtual_machine" "main" {
     storage_account_type = "Standard_LRS"
     caching              = "ReadWrite"
   }
+*/
+
+
+
 }
