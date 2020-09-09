@@ -127,41 +127,6 @@ resource "azurerm_lb" "main" {
 }
 
 
-
-
-
-
-resource "azurerm_linux_virtual_machine" "main" {
-  name                            = "${var.prefix}-vm"
-  resource_group_name             = azurerm_resource_group.main.name
-  location                        = azurerm_resource_group.main.location
-  size                            = "Standard_B1ls"
-  #admin_username                  = "adminuser"
-  #admin_password                  = "P@ssw0rd1234!"
-  admin_username                  = var.admin_username
-  admin_password                  = var.admin_password
-  disable_password_authentication = false
-  network_interface_ids = [
-    azurerm_network_interface.main.id,
-  ]
-
-  source_image_reference {
-    publisher = "Canonical"
-    offer     = "UbuntuServer"
-    sku       = "18.04-LTS"
-    version   = "latest"
-  }
-
-  os_disk {
-    storage_account_type = "Standard_LRS"
-    caching              = "ReadWrite"
-  }
-
-
-
-
-
-
 # VM - WILL ADD LOOP TO MAKE MULTIPLE OF THEM LATER
 resource "azurerm_linux_virtual_machine" "main" {
   name                             = "${var.prefix}-vm1"
