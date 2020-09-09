@@ -17,3 +17,14 @@ variable "admin_password" {
   description = "The admin password"
   default     = "Ymn$DJ5Igv#0U0d906HZ"
 }
+
+variable "address_space" {
+  description = "VNET address space"
+  default     = "10.4.0.0/16"
+}
+
+variable "subnet" {
+  description = "Subnet address space"
+  default     = "10.4.0.0/24"
+}
+

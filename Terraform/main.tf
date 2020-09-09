@@ -2,149 +2,127 @@ provider "azurerm" {
   features {}
 }
 
+
+# RG
 resource "azurerm_resource_group" "main" {
-  name     = "${var.prefix}-rg5"
+  name     = "${var.prefix}-rg"
   location = var.location
 }
 
+
+# VNET
 resource "azurerm_virtual_network" "main" {
-  name                = "${var.prefix}-vnet1"
-  address_space       = ["10.4.0.0/16"]
+  name                = "${var.prefix}-vnet"
+  address_space       = ["${var.address_space}"]
   location            = azurerm_resource_group.main.location
   resource_group_name = azurerm_resource_group.main.name
 }
 
+
+# Subnet
 resource "azurerm_subnet" "main" {
-  name                 = "${var.prefix}-subnet1"
+  name                 = "${var.prefix}-subnet"
   resource_group_name  = azurerm_resource_group.main.name
   virtual_network_name = azurerm_virtual_network.main.name
-  address_prefixes     = ["10.4.0.0/24"]
+  address_prefixes     = ["${var.subnet}"]
 }
 
 
-#NSG
+# NSG
 resource "azurerm_network_security_group" "nsg" {
-  name                = "${var.prefix}-nsg1"
+  name                = "${var.prefix}-nsg"
   location            = azurerm_resource_group.main.location
   resource_group_name = azurerm_resource_group.main.name
 
-  #security_rule {
-  #  name                       = "test123"
-  #  priority                   = 100
-  #  direction                  = "Inbound"
-  #  access                     = "Allow"
-  #  protocol                   = "Tcp"
-  #  source_port_range          = "*"
-  #  destination_port_range     = "*"
-  #  source_address_prefix      = "*"
-  #  destination_address_prefix = "*"
-  #}
-}
+  /*
+  # SSH access
+  security_rule {
+    name                       = "Port22FromSubnet"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "TCP"
+    source_port_range          = "*"
+    destination_port_range     = "22"
+    source_address_prefix      = var.subnet
+    destination_address_prefix = "Any"
+  }
+  */
 
-
-
-resource "azurerm_network_interface" "main" {
-  name                = "${var.prefix}-nic1"
-  resource_group_name = azurerm_resource_group.main.name
-  location            = azurerm_resource_group.main.location
-
-  ip_configuration {
-    name                          = "internal"
-    subnet_id                     = azurerm_subnet.main.id
-    private_ip_address_allocation = "Dynamic"
+  # HTTP access from Rob PC
+  security_rule {
+    name                       = "Port80FromRobPC"
+    priority                   = 120
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "TCP"
+    source_port_range          = "*"
+    destination_port_range     = "80"
+    source_address_prefix      = "146.200.28.185"
+    destination_address_prefix = "Any"
   }
 }
 
-# NEED TO ASSOCIATE IP WITH NIC?
+
+# PIP
 resource "azurerm_public_ip" "public_ip" {
-  name                = "public_ip"
+  name                = "${var.prefix}-pip"
   resource_group_name = azurerm_resource_group.main.name
   location            = azurerm_resource_group.main.location
   allocation_method   = "Dynamic"
-
-  #tags = {
-  #  environment = "Production"
-  #}
+  sku                 = "Standard"
+  domain_name_label   = "${var.prefix}-udacity-project1"
 }
 
 
+# AVSet
+resource "azurerm_availability_set" "main" {
+  name                = "${var.prefix}-avset"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
+}
 
 
-#SCALE SET - SHOULD BE AVAILABILITY SET!!!!
-resource "azurerm_virtual_machine_scale_set" "main" {
-  name                = "${var.prefix}-"
-  location            = azurerm_resource_group.main.location
+# LB
+resource "azurerm_lb" "main" {
+  name                = "${var.prefix}-lb"
+  location            = var.location
   resource_group_name = azurerm_resource_group.main.name
+  sku                 = "Standard"
 
-  # automatic rolling upgrade
-  automatic_os_upgrade = true
-  upgrade_policy_mode  = "Rolling"
-
-  #rolling_upgrade_policy {
-  #  max_batch_instance_percent              = 20
-  #  max_unhealthy_instance_percent          = 20
-  #  max_unhealthy_upgraded_instance_percent = 5
-  #  pause_time_between_batches              = "PT0S"
-  #}
-
-  # required when using rolling upgrade policy
-  #health_probe_id = azurerm_lb_probe.example.id
-
-  sku {
-    name     = "Standard_B1ls"
-    #tier     = "Standard"
-    capacity = 3
+  frontend_ip_configuration {
+    name                 = "${var.prefix}-lbfrontend"
+    public_ip_address_id = azurerm_public_ip.main.id
   }
 
-  storage_profile_image_reference {
-    publisher = "Canonical"
-    offer     = "UbuntuServer"
-    sku       = "18.04-LTS"
-    version   = "latest"
+
+  # Backend address pool
+  resource "azurerm_lb_backend_address_pool" "main" {
+    resource_group_name = azurerm_resource_group.main.name
+    loadbalancer_id     = azurerm_lb.main.id
+    name                = "${var.prefix}-backendpool"
   }
 
-  storage_profile_os_disk {
-    #name              = ""
-    #caching           = "ReadWrite"
-    create_option     = "FromImage"
-    managed_disk_type = "Standard_LRS"
+
+  # LB health probe
+  resource "azurerm_lb_probe" "main" {
+    resource_group_name = azurerm_resource_group.main.name
+    loadbalancer_id     = azurerm_lb.main.id
+    name                = "${var.prefix}-lbhealth"
+    port                = 80
   }
 
-  storage_profile_data_disk {
-    lun           = 0
-    #caching       = "ReadWrite"
-    create_option = "Empty"
-    disk_size_gb  = 10
-  }
 
-  os_profile {
-    computer_name_prefix = "${var.prefix}-"
-    admin_username       = var.admin_username
-    admin_password       = var.admin_password
-  }
-
-/*
-  os_profile_linux_config {
-    disable_password_authentication = true
-
-    ssh_keys {
-      path     = "/home/myadmin/.ssh/authorized_keys"
-      key_data = file("~/.ssh/demo_key.pub")
-    }
-  */
-  network_profile {
-    name    = "terraformnetworkprofile"
-    primary = true
-
-    ip_configuration {
-      name                                   = "ipconfig"
-      primary                                = true
-      subnet_id                              = azurerm_subnet.main.id
-      #load_balancer_backend_address_pool_ids = [azurerm_lb_backend_address_pool.bpepool.id]
-      #load_balancer_inbound_nat_rules_ids    = [azurerm_lb_nat_pool.lbnatpool.id]
-    }
-  }
-  
+  # LB rule
+  resource "azurerm_lb_rule" "main" {
+    resource_group_name            = azurerm_resource_group.main.name
+    loadbalancer_id                = azurerm_lb.main.id
+    name                           = "${var.prefix}-lbrule"
+    protocol                       = "TCP"
+    frontend_port                  = 80
+    backend_port                   = 80
+    frontend_ip_configuration_name = "${var.prefix}-lbfrontend"
+    backend_address_pool_id        = azurerm_lb_backend_address_pool.main.id
   }
 
 
@@ -152,7 +130,6 @@ resource "azurerm_virtual_machine_scale_set" "main" {
 
 
 
-/*
 resource "azurerm_linux_virtual_machine" "main" {
   name                            = "${var.prefix}-vm"
   resource_group_name             = azurerm_resource_group.main.name
@@ -178,6 +155,97 @@ resource "azurerm_linux_virtual_machine" "main" {
     storage_account_type = "Standard_LRS"
     caching              = "ReadWrite"
   }
+
+
+
+
+
+
+# VM - WILL ADD LOOP TO MAKE MULTIPLE OF THEM LATER
+resource "azurerm_linux_virtual_machine" "main" {
+  name                             = "${var.prefix}-vm1"
+  location                         = azurerm_resource_group.main.location
+  resource_group_name              = azurerm_resource_group.main.name
+  network_interface_ids            = [azurerm_network_interface.main.id]
+  size                             = "Standard_B1ls"
+  admin_username                   = var.admin_username
+  admin_password                   = var.admin_password
+  delete_os_disk_on_termination    = "True"
+  delete_data_disks_on_termination = "True"
+  disable_password_authentication  = "False"
+  availability_set_id              = azurerm_availability_set.main.id
+
+  # virtual machine storage image reference
+  storage_image_reference {
+    publisher = "Canonical"
+    offer     = "UbuntuServer"
+    sku       = "18.04-LTS"
+    version   = "latest"
+  }
+
+  # virtual machine storage os disk
+  os_disk {
+    name              = "${var.prefix}-osdisk"
+    create_option     = "Empty"
+    managed_disk_type = "Standard_LRS"
+  }
+
+  # virtual machine os profile
+  #os_profile {
+  #  computer_name  = "${var.prefix}-vm1"
+  #  admin_username = var.admin_username
+  #  admin_password = var.admin_password
+  #}
+
+  # virtual machine os profile linux config
+  #os_profile_linux_config {
+  #  disable_password_authentication = "False"
+  #}
+
+  
+  #storage_data_disk {
+  #  name              = "${var.prefix}-datadisk"
+  #  create_option     = "Empty"
+  #  managed_disk_type = "Standard_LRS"
+  #}
+
+}
+
+
+# Data disk
+resource "azure_data_disk" "data" {
+  lun                  = 0
+  size                 = 10
+  storage_service_name = "${var.prefix}-datadisk"
+  virtual_machine      = "${var.prefix}-vm"
+}
+
+
+# NIC
+resource "azurerm_network_interface" "main" {
+  name                = "${var.prefix}-nic"
+  resource_group_name = azurerm_resource_group.main.name
+  location            = azurerm_resource_group.main.location
+
+  ip_configuration {
+    name                          = "${var.prefix}-ipconfig"
+    subnet_id                     = azurerm_subnet.main.id
+    private_ip_address_allocation = "Dynamic"
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+/*
+
 */
 
 
