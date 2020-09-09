@@ -29,25 +29,11 @@ resource "azurerm_subnet" "main" {
 
 
 # NSG
-resource "azurerm_network_security_group" "nsg" {
+resource "azurerm_network_security_group" "main" {
   name                = "${var.prefix}-nsg"
   location            = azurerm_resource_group.main.location
   resource_group_name = azurerm_resource_group.main.name
 
-  /*
-  # SSH access
-  security_rule {
-    name                       = "Port22FromSubnet"
-    priority                   = 100
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "TCP"
-    source_port_range          = "*"
-    destination_port_range     = "22"
-    source_address_prefix      = var.subnet
-    destination_address_prefix = "Any"
-  }
-  */
 
   # HTTP access from Rob PC
   security_rule {
@@ -65,7 +51,7 @@ resource "azurerm_network_security_group" "nsg" {
 
 
 # PIP
-resource "azurerm_public_ip" "public_ip" {
+resource "azurerm_public_ip" "main" {
   name                = "${var.prefix}-pip"
   resource_group_name = azurerm_resource_group.main.name
   location            = azurerm_resource_group.main.location
@@ -78,8 +64,8 @@ resource "azurerm_public_ip" "public_ip" {
 # AVSet
 resource "azurerm_availability_set" "main" {
   name                = "${var.prefix}-avset"
-  location            = azurerm_resource_group.example.location
-  resource_group_name = azurerm_resource_group.example.name
+  location            = azurerm_resource_group.main.location
+  resource_group_name = azurerm_resource_group.main.name
 }
 
 
@@ -94,36 +80,35 @@ resource "azurerm_lb" "main" {
     name                 = "${var.prefix}-lbfrontend"
     public_ip_address_id = azurerm_public_ip.main.id
   }
+}
+
+# Backend address pool
+ resource "azurerm_lb_backend_address_pool" "main" {
+  resource_group_name = azurerm_resource_group.main.name
+  loadbalancer_id     = azurerm_lb.main.id
+  name                = "${var.prefix}-backendpool"
+}
 
 
-  # Backend address pool
-  resource "azurerm_lb_backend_address_pool" "main" {
-    resource_group_name = azurerm_resource_group.main.name
-    loadbalancer_id     = azurerm_lb.main.id
-    name                = "${var.prefix}-backendpool"
-  }
+# LB health probe
+resource "azurerm_lb_probe" "main" {
+  resource_group_name = azurerm_resource_group.main.name
+  loadbalancer_id     = azurerm_lb.main.id
+  name                = "${var.prefix}-lbhealth"
+  port                = 80
+}
 
 
-  # LB health probe
-  resource "azurerm_lb_probe" "main" {
-    resource_group_name = azurerm_resource_group.main.name
-    loadbalancer_id     = azurerm_lb.main.id
-    name                = "${var.prefix}-lbhealth"
-    port                = 80
-  }
-
-
-  # LB rule
-  resource "azurerm_lb_rule" "main" {
-    resource_group_name            = azurerm_resource_group.main.name
-    loadbalancer_id                = azurerm_lb.main.id
-    name                           = "${var.prefix}-lbrule"
-    protocol                       = "TCP"
-    frontend_port                  = 80
-    backend_port                   = 80
-    frontend_ip_configuration_name = "${var.prefix}-lbfrontend"
-    backend_address_pool_id        = azurerm_lb_backend_address_pool.main.id
-  }
+# LB rule
+resource "azurerm_lb_rule" "main" {
+  resource_group_name            = azurerm_resource_group.main.name
+  loadbalancer_id                = azurerm_lb.main.id
+  name                           = "${var.prefix}-lbrule"
+  protocol                       = "TCP"
+  frontend_port                  = 80
+  backend_port                   = 80
+  frontend_ip_configuration_name = "${var.prefix}-lbfrontend"
+  backend_address_pool_id        = azurerm_lb_backend_address_pool.main.id
 }
 
 
@@ -136,24 +121,20 @@ resource "azurerm_linux_virtual_machine" "main" {
   size                             = "Standard_B1ls"
   admin_username                   = var.admin_username
   admin_password                   = var.admin_password
-  delete_os_disk_on_termination    = "True"
-  delete_data_disks_on_termination = "True"
-  disable_password_authentication  = "False"
+  disable_password_authentication  = false
   availability_set_id              = azurerm_availability_set.main.id
 
-  # virtual machine storage image reference
-  storage_image_reference {
+  source_image_reference {
     publisher = "Canonical"
     offer     = "UbuntuServer"
     sku       = "18.04-LTS"
     version   = "latest"
   }
 
-  # virtual machine storage os disk
   os_disk {
-    name              = "${var.prefix}-osdisk"
-    create_option     = "Empty"
-    managed_disk_type = "Standard_LRS"
+    name                 = "${var.prefix}-osdisk"
+    storage_account_type = "Standard_LRS"
+    caching              = "ReadWrite"
   }
 
   # virtual machine os profile
@@ -192,7 +173,7 @@ resource "azurerm_managed_disk" "main" {
 # Data disk attachment
 resource "azurerm_virtual_machine_data_disk_attachment" "main" {
   managed_disk_id    = azurerm_managed_disk.main.id
-  virtual_machine_id = azurerm_virtual_machine.main.id
+  virtual_machine_id = azurerm_linux_virtual_machine.main.id
   lun                = "0"
   caching            = "ReadWrite"
 }
@@ -210,3 +191,5 @@ resource "azurerm_network_interface" "main" {
     private_ip_address_allocation = "Dynamic"
   }
 }
+
+
