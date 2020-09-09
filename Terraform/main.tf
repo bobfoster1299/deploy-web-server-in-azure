@@ -55,7 +55,7 @@ resource "azurerm_network_interface" "main" {
   }
 }
 
-# NEED TO ASSOCIATE IP WITH NIC
+# NEED TO ASSOCIATE IP WITH NIC?
 resource "azurerm_public_ip" "public_ip" {
   name                = "public_ip"
   resource_group_name = azurerm_resource_group.main.name
@@ -107,7 +107,7 @@ resource "azurerm_virtual_machine_scale_set" "main" {
     #name              = ""
     #caching           = "ReadWrite"
     create_option     = "FromImage"
-    #managed_disk_type = "Standard_LRS"
+    managed_disk_type = "Standard_LRS"
   }
 
   storage_profile_data_disk {
@@ -118,9 +118,9 @@ resource "azurerm_virtual_machine_scale_set" "main" {
   }
 
   os_profile {
-    computer_name_prefix = "${var.prefix}-vm-"
-    admin_username       = "admin"
-    admin_password       = "PSRWuDxZ6$%imR84i&td"
+    computer_name_prefix = "${var.prefix}"
+    admin_username       = var.admin_username
+    admin_password       = var.admin_password
   }
 
 /*
