@@ -113,8 +113,8 @@ resource "azurerm_virtual_machine_scale_set" "main" {
   storage_profile_data_disk {
     lun           = 0
     #caching       = "ReadWrite"
-    #create_option = "Empty"
-    #disk_size_gb  = 10
+    create_option = "Empty"
+    disk_size_gb  = 10
   }
 
   os_profile {
