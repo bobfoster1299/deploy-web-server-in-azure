@@ -69,7 +69,7 @@ resource "azurerm_public_ip" "public_ip" {
 
 
 
-/*
+
 #SCALE SET
 resource "azurerm_virtual_machine_scale_set" "main" {
   name                = "${var.prefix}-scaleset1"
@@ -77,51 +77,53 @@ resource "azurerm_virtual_machine_scale_set" "main" {
   resource_group_name = azurerm_resource_group.main.name
 
   # automatic rolling upgrade
-  automatic_os_upgrade = true
-  upgrade_policy_mode  = "Rolling"
+  #automatic_os_upgrade = true
+  #upgrade_policy_mode  = "Rolling"
 
-  rolling_upgrade_policy {
-    max_batch_instance_percent              = 20
-    max_unhealthy_instance_percent          = 20
-    max_unhealthy_upgraded_instance_percent = 5
-    pause_time_between_batches              = "PT0S"
-  }
+  #rolling_upgrade_policy {
+  #  max_batch_instance_percent              = 20
+  #  max_unhealthy_instance_percent          = 20
+  #  max_unhealthy_upgraded_instance_percent = 5
+  #  pause_time_between_batches              = "PT0S"
+  #}
 
   # required when using rolling upgrade policy
-  health_probe_id = azurerm_lb_probe.example.id
+  #health_probe_id = azurerm_lb_probe.example.id
 
   sku {
-    name     = "Standard_F2"
-    tier     = "Standard"
-    capacity = 2
+    name     = "Standard_B1ls"
+    #tier     = "Standard"
+    capacity = 3
   }
 
   storage_profile_image_reference {
     publisher = "Canonical"
     offer     = "UbuntuServer"
-    sku       = "16.04-LTS"
+    sku       = "18.04-LTS"
     version   = "latest"
   }
 
   storage_profile_os_disk {
-    name              = ""
-    caching           = "ReadWrite"
+    #name              = ""
+    #caching           = "ReadWrite"
     create_option     = "FromImage"
-    managed_disk_type = "Standard_LRS"
+    #managed_disk_type = "Standard_LRS"
   }
 
   storage_profile_data_disk {
     lun           = 0
-    caching       = "ReadWrite"
-    create_option = "Empty"
-    disk_size_gb  = 10
+    #caching       = "ReadWrite"
+    #create_option = "Empty"
+    #disk_size_gb  = 10
   }
 
   os_profile {
-    computer_name_prefix = "testvm"
-    admin_username       = "myadmin"
+    computer_name_prefix = "${var.prefix}-vm-"
+    admin_username       = "admin"
+    admin_password       = "PSRWuDxZ6$%imR84i&td"
   }
 
+/*
   os_profile_linux_config {
     disable_password_authentication = true
 
@@ -129,8 +131,10 @@ resource "azurerm_virtual_machine_scale_set" "main" {
       path     = "/home/myadmin/.ssh/authorized_keys"
       key_data = file("~/.ssh/demo_key.pub")
     }
+  */
+  
   }
-*/
+
 
 
 
@@ -166,4 +170,4 @@ resource "azurerm_linux_virtual_machine" "main" {
 
 
 
-}
+
