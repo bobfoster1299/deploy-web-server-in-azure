@@ -15,5 +15,5 @@ variable "admin_username" {
 
 variable "admin_password" {
   description = "The admin password"
-  default     = "P@ssw0rd1234!"
+  default     = "Ymn$DJ5Igv#0U0d906HZ"
 }

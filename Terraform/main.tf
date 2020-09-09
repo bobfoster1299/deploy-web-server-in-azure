@@ -70,7 +70,7 @@ resource "azurerm_public_ip" "public_ip" {
 
 
 
-#SCALE SET
+#SCALE SET - SHOULD BE AVAILABILITY SET!!!!
 resource "azurerm_virtual_machine_scale_set" "main" {
   name                = "${var.prefix}-"
   location            = azurerm_resource_group.main.location
