@@ -118,7 +118,7 @@ resource "azurerm_virtual_machine_scale_set" "main" {
   }
 
   os_profile {
-    computer_name_prefix = "${var.prefix}"
+    computer_name_prefix = "${var.prefix}-"
     admin_username       = var.admin_username
     admin_password       = var.admin_password
   }
