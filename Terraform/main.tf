@@ -202,3 +202,10 @@ resource "azurerm_network_interface_backend_address_pool_association" "main" {
   ip_configuration_name   = azurerm_network_interface.main.ip_configuration[0].name
   backend_address_pool_id = azurerm_lb_backend_address_pool.main.id
 }
+
+
+
+resource "azurerm_network_interface_application_security_group_association" "main" {
+  network_interface_id          = azurerm_network_interface.main.id
+  application_security_group_id = azurerm_application_security_group.main.id
+}
