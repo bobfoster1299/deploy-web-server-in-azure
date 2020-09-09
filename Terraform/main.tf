@@ -77,8 +77,8 @@ resource "azurerm_virtual_machine_scale_set" "main" {
   resource_group_name = azurerm_resource_group.main.name
 
   # automatic rolling upgrade
-  #automatic_os_upgrade = true
-  #upgrade_policy_mode  = "Rolling"
+  automatic_os_upgrade = true
+  upgrade_policy_mode  = "Rolling"
 
   #rolling_upgrade_policy {
   #  max_batch_instance_percent              = 20
