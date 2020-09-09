@@ -14,7 +14,7 @@ resource "azurerm_virtual_network" "main" {
   resource_group_name = azurerm_resource_group.main.name
 }
 
-resource "azurerm_subnet" "internal" {
+resource "azurerm_subnet" "main" {
   name                 = "${var.prefix}-subnet1"
   resource_group_name  = azurerm_resource_group.main.name
   virtual_network_name = azurerm_virtual_network.main.name
@@ -132,6 +132,18 @@ resource "azurerm_virtual_machine_scale_set" "main" {
       key_data = file("~/.ssh/demo_key.pub")
     }
   */
+  network_profile {
+    name    = "terraformnetworkprofile"
+    primary = true
+
+    ip_configuration {
+      name                                   = "ipconfig"
+      primary                                = true
+      subnet_id                              = azurerm_subnet.main.id
+      #load_balancer_backend_address_pool_ids = [azurerm_lb_backend_address_pool.bpepool.id]
+      #load_balancer_inbound_nat_rules_ids    = [azurerm_lb_nat_pool.lbnatpool.id]
+    }
+  }
   
   }
 
