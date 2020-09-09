@@ -45,7 +45,7 @@ resource "azurerm_network_security_group" "main" {
     source_port_range          = "*"
     destination_port_range     = "80"
     source_address_prefix      = "146.200.28.185/32"
-    destination_address_prefix = "Any"
+    destination_address_prefix = "*"
   }
 }
 
@@ -55,7 +55,7 @@ resource "azurerm_public_ip" "main" {
   name                = "${var.prefix}-pip"
   resource_group_name = azurerm_resource_group.main.name
   location            = azurerm_resource_group.main.location
-  allocation_method   = "Dynamic"
+  allocation_method   = "Static"
   sku                 = "Standard"
   domain_name_label   = "${var.prefix}-udacity-project1"
 }
