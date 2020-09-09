@@ -1,0 +1,29 @@
+{
+  "builders": [{
+    "type": "azure-arm",
+
+    "client_id": "347969f7-9523-42f9-a050-d3343dfb22ee",
+    "client_secret": "N3zkGeZhj8c5GjoJIrFgKzjr~4bw8i5B8X",
+    "tenant_id": "3dd5b5f2-5611-484b-9ddc-6b5adbe06fcf",
+    "subscription_id": "c52fdecd-f36f-49fd-b8e7-8d0a490e2977",
+
+    "managed_image_resource_group_name": "rob-rg4",
+    "managed_image_name": "rob-packer-image",
+
+    "os_type": "Linux",
+    "image_publisher": "Canonical",
+    "image_offer": "UbuntuServer",
+    "image_sku": "18.04-LTS",
+
+    "location": "East US",
+    "vm_size": "Standard_B1ls"
+  }],
+  "provisioners": [{
+    "inline": [
+      "echo 'Hello, World!' > index.html",
+      "nohup busybox httpd -f -p 80 &"
+    ],
+    "inline_shebang": "/bin/sh -x",
+    "type": "shell"
+  }]
+}

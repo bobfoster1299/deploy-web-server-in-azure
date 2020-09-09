@@ -1,9 +1,22 @@
-POLICY
+3. Deploy a policy - COMPLETED!
 
 Create policy definitition:
-az policy definition create --name tagging-policy --mode indexed --rules policy.json --params params.json
+az policy definition create --name tagging-policy --mode indexed --rules policy.json
 
-Assign policy definition (assigned to RG rather than whole subscription for now):
-az policy assignment create --policy tagging-policy --resource-group rob-rg4 --name tagging-policy
+Assign policy definition:
+az policy assignment create --policy tagging-policy --name tagging-policy
 
-POLICY TAKES 30 MINS OR SO TO APPLY: https://docs.microsoft.com/en-us/azure/governance/policy/troubleshoot/general
+
+
+4. Packer template
+
+Create image:
+packer build server.json
+
+WEBSERVER DOESN'T SEEM TO RUN AFTER BUILDING
+
+
+5. Terraform template
+
+Download plugins:
+terraform init
