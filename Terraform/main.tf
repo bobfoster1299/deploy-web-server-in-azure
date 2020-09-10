@@ -140,7 +140,7 @@ resource "azurerm_linux_virtual_machine" "main" {
   name                             = "${var.prefix}-vm-${count.index}"
   location                         = azurerm_resource_group.main.location
   resource_group_name              = azurerm_resource_group.main.name
-  network_interface_ids            = ["azurerm_network_interface.main[${count.index}].id"]
+  network_interface_ids            = ["${element(azurerm_network_interface.main.*.id, count.index)}"]
   size                             = "Standard_B1ls"
   admin_username                   = var.admin_username
   admin_password                   = var.admin_password
