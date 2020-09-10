@@ -177,8 +177,8 @@ resource "azurerm_managed_disk" "main" {
 # Data disk attachment
 resource "azurerm_virtual_machine_data_disk_attachment" "main" {
   count              = var.number_of_vms
-  managed_disk_id    = "azurerm_managed_disk.main[${count.index}].id"
-  virtual_machine_id = "azurerm_linux_virtual_machine[${count.index}].main.id"
+  managed_disk_id    = element(azurerm_managed_disk.main.*.id, count.index)
+  virtual_machine_id = element(azurerm_linux_virtual_machine.main.*.id, count.index)
   lun                = "0"
   caching            = "ReadWrite"
 }
@@ -202,8 +202,8 @@ resource "azurerm_network_interface" "main" {
 # Associate VM with backend pool
 resource "azurerm_network_interface_backend_address_pool_association" "main" {
   count                   = var.number_of_vms
-  network_interface_id    = "azurerm_network_interface.main[${count.index}].id"
-  ip_configuration_name   = "azurerm_network_interface.main[${count.index}].ip_configuration[0].name"
+  network_interface_id    = element(azurerm_network_interface.main.*.id, count.index)
+  ip_configuration_name   = element(azurerm_network_interface.main.*.ip_configuration[0].name, count.index)
   backend_address_pool_id = azurerm_lb_backend_address_pool.main.id
 }
 
@@ -211,6 +211,6 @@ resource "azurerm_network_interface_backend_address_pool_association" "main" {
 # Associate NIC with NSG
 resource "azurerm_network_interface_security_group_association" "main" {
   count                         = var.number_of_vms
-  network_interface_id          = "azurerm_network_interface.main[${count.index}].id"
+  network_interface_id          = element(azurerm_network_interface.main.*.id, count.index)
   network_security_group_id     = azurerm_network_security_group.main.id
 }
