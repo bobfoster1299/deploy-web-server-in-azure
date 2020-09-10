@@ -19,7 +19,7 @@ To assign the policy definition:
 az policy assignment create --policy tagging-policy --name tagging-policy
 ```
 
-## Create a packer template
+## Create a template using packer
 
 Before running packer, create a resource group to contain all the resources:
 ```
@@ -35,7 +35,9 @@ On the machine you are running packer from, set the following environment variab
 CLIENT_ID, CLIENT_SECRET, TENANT_ID, SUBSCRIPTION_ID
 
 Create your template:
+```
 packer build ./packer/server.json
+```
 
 ## Provision resources using terraform
 
