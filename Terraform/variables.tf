@@ -8,6 +8,12 @@ variable "location" {
   default     = "uksouth"
 }
 
+variable "number_of_vms" {
+  description = "Number of VMs to provision"
+  type        = number
+  default     = 3
+}
+
 variable "admin_username" {
   description = "The admin username"
   default     = "adminuser"

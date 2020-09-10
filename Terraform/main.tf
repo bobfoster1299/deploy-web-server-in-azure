@@ -136,10 +136,11 @@ resource "azurerm_lb_rule" "main" {
 
 # VM - WILL ADD LOOP TO MAKE MULTIPLE OF THEM LATER
 resource "azurerm_linux_virtual_machine" "main" {
-  name                             = "${var.prefix}-vm1"
+  count                            = var.number_of_vms
+  name                             = "${var.prefix}-vm-${count.index}"
   location                         = azurerm_resource_group.main.location
   resource_group_name              = azurerm_resource_group.main.name
-  network_interface_ids            = [azurerm_network_interface.main.id]
+  network_interface_ids            = ["azurerm_network_interface.main[${count.index}].id"]
   size                             = "Standard_B1ls"
   admin_username                   = var.admin_username
   admin_password                   = var.admin_password
@@ -154,7 +155,7 @@ resource "azurerm_linux_virtual_machine" "main" {
   }
 
   os_disk {
-    name                 = "${var.prefix}-osdisk"
+    name                 = "${var.prefix}-osdisk-${count.index}"
     storage_account_type = "Standard_LRS"
     caching              = "ReadWrite"
   }
@@ -163,7 +164,8 @@ resource "azurerm_linux_virtual_machine" "main" {
 
 # Data disk
 resource "azurerm_managed_disk" "main" {
-  name                 = "${var.prefix}-datadisk"
+  count                = var.number_of_vms
+  name                 = "${var.prefix}-datadisk-${count.index}"
   location             = azurerm_resource_group.main.location
   resource_group_name  = azurerm_resource_group.main.name
   storage_account_type = "Standard_LRS"
@@ -174,8 +176,9 @@ resource "azurerm_managed_disk" "main" {
 
 # Data disk attachment
 resource "azurerm_virtual_machine_data_disk_attachment" "main" {
-  managed_disk_id    = azurerm_managed_disk.main.id
-  virtual_machine_id = azurerm_linux_virtual_machine.main.id
+  count              = var.number_of_vms
+  managed_disk_id    = "azurerm_managed_disk.main[${count.index}].id"
+  virtual_machine_id = "azurerm_linux_virtual_machine[${count.index}].main.id"
   lun                = "0"
   caching            = "ReadWrite"
 }
@@ -183,7 +186,8 @@ resource "azurerm_virtual_machine_data_disk_attachment" "main" {
 
 # NIC
 resource "azurerm_network_interface" "main" {
-  name                = "${var.prefix}-nic"
+  count               = var.number_of_vms
+  name                = "${var.prefix}-nic-${count.index}"
   resource_group_name = azurerm_resource_group.main.name
   location            = azurerm_resource_group.main.location
 
@@ -197,14 +201,16 @@ resource "azurerm_network_interface" "main" {
 
 # Associate VM with backend pool
 resource "azurerm_network_interface_backend_address_pool_association" "main" {
-  network_interface_id    = azurerm_network_interface.main.id
-  ip_configuration_name   = azurerm_network_interface.main.ip_configuration[0].name
+  count                   = var.number_of_vms
+  network_interface_id    = "azurerm_network_interface.main[${count.index}].id"
+  ip_configuration_name   = "azurerm_network_interface.main[${count.index}].ip_configuration[0].name"
   backend_address_pool_id = azurerm_lb_backend_address_pool.main.id
 }
 
 
 # Associate NIC with NSG
 resource "azurerm_network_interface_security_group_association" "main" {
-  network_interface_id          = azurerm_network_interface.main.id
+  count                         = var.number_of_vms
+  network_interface_id          = "azurerm_network_interface.main[${count.index}].id"
   network_security_group_id     = azurerm_network_security_group.main.id
 }
