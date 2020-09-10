@@ -2,11 +2,21 @@ provider "azurerm" {
   features {}
 }
 
+locals {
+  tags = {
+    environment  = "${var.environment}"
+    project      = "${var.project}"  
+    Owner        = "${var.owner}"
+  }
+}
+
 resource "azurerm_resource_group" "main" {
   name     = "${var.prefix}-rg"
   location = var.location
+  tags     = local.tags
 }
 
+/*
 resource "azurerm_virtual_network" "main" {
   name                = "${var.prefix}-vnet"
   address_space       = ["${var.address_space}"]
@@ -164,3 +174,8 @@ resource "azurerm_network_interface_security_group_association" "main" {
   network_interface_id      = element(azurerm_network_interface.main.*.id, count.index)
   network_security_group_id = azurerm_network_security_group.main.id
 }
+
+
+
+
+*/

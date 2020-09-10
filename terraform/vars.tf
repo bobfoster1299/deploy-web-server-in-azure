@@ -33,3 +33,18 @@ variable "subnet" {
   description = "Subnet address space"
   default     = "10.4.0.0/24"
 }
+
+variable "environment" {
+  description = "Environment tag, e.g. prod, dev"
+  default     = "dev"
+}
+
+variable "project" {
+  description = "Project tag"
+  default     = "udacity"
+}
+
+variable "owner" {
+  description = "Owner tag"
+  default     = "Rob Foster"
+}
