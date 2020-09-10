@@ -152,7 +152,6 @@ resource "azurerm_virtual_machine_data_disk_attachment" "main" {
   virtual_machine_id = element(azurerm_linux_virtual_machine.main.*.id, count.index)
   lun                = "0"
   caching            = "ReadWrite"
-  tags               = local.tags
 }
 
 resource "azurerm_network_interface" "main" {
