@@ -23,11 +23,11 @@ It does the following:
 
 ## Deploy the policy
 
-To create the policy definitition:
+Create the policy definitition:
 ```
 az policy definition create --name tagging-policy --mode indexed --rules policy.json
 ```
-To assign the policy definition:
+Assign the policy definition:
 ```
 az policy assignment create --policy tagging-policy --name tagging-policy
 ```
