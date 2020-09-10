@@ -9,7 +9,7 @@
       "subscription_id": "c52fdecd-f36f-49fd-b8e7-8d0a490e2977",
 
       "managed_image_resource_group_name": "rob-rg",
-      "managed_image_name": "rob-packer-image1",
+      "managed_image_name": "rob-packer-image2",
 
       "os_type": "Linux",
       "image_publisher": "Canonical",
@@ -23,10 +23,10 @@
   "provisioners": [
     {
       "inline": [
-          "sudo echo 'Hello, World!' > index.html",
-          "sudo nohup busybox httpd -f -p 80 &"
-        ],
-      "inline_shebang": "/bin/sh -c",
+        "echo 'Hello, World!' > index.html",
+        "nohup busybox httpd -f -p 80 &"
+      ],
+      "inline_shebang": "sudo /bin/sh -c",
       "type": "shell"
     }
   ]
