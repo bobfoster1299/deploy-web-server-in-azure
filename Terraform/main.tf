@@ -206,6 +206,10 @@ resource "azurerm_network_interface_backend_address_pool_association" "main" {
   #ip_configuration_name   = element(azurerm_network_interface.main.*.ip_configuration[0].name, count.index)
   ip_configuration_name   = element(azurerm_network_interface.main.*.ip_configuration.name, count.index)
   backend_address_pool_id = azurerm_lb_backend_address_pool.main.id
+
+  depends_on = [
+    azurerm_network_interface.main
+  ]
 }
 
 
