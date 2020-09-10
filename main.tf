@@ -10,12 +10,6 @@ locals {
   }
 }
 
-#resource "azurerm_resource_group" "main" {
-#  name     = "${var.prefix}-rg"
-#  location = var.location
-#  tags     = local.tags
-#}
-
 # Reference existing resource group
 data "azurerm_resource_group" "main" {
   name = "${var.prefix}-rg"
