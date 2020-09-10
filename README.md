@@ -34,7 +34,7 @@ On the machine you are running packer from, set the following environment variab
 
 CLIENT_ID, CLIENT_SECRET, TENANT_ID, SUBSCRIPTION_ID
 
-Create your template:
+Create the template in azure:
 ```
 packer build ./packer/server.json
 ```
