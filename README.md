@@ -50,9 +50,9 @@ On the machine you are running packer from, set the following environment variab
 - TENANT_ID
 - SUBSCRIPTION_ID
 
-Customize the values in packer.json, then create the template in azure:
+Customize the values in server.json, then create the template in azure:
 ```
-packer build packer.json
+packer build server.json
 ```
 
 ## Provision resources using terraform

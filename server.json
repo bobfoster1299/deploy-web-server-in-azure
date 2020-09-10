@@ -14,7 +14,7 @@
       "tenant_id": "{{user `azure_tenant_id`}}",
       "subscription_id": "{{user `azure_subscription_id`}}",
       "managed_image_resource_group_name": "rob-rg",
-      "managed_image_name": "rob-packer-image2",
+      "managed_image_name": "rob-packer-image",
       "os_type": "Linux",
       "image_publisher": "Canonical",
       "image_offer": "UbuntuServer",
