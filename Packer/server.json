@@ -1,21 +1,24 @@
 {
+  "variables": {
+    "azure_client_id": "{{env `CLIENT_ID`}}",
+    "azure_client_secret": "{{env `CLIENT_SECRET`}}",
+    "azure_tenant_id": "{{env `TENANT_ID`}}",
+    "azure_subscription_id": "{{env `SUBSCRIPTION_ID`}}"
+  },
+
   "builders": [
     {
       "type": "azure-arm",
-
-      "client_id": "347969f7-9523-42f9-a050-d3343dfb22ee",
-      "client_secret": "N3zkGeZhj8c5GjoJIrFgKzjr~4bw8i5B8X",
-      "tenant_id": "3dd5b5f2-5611-484b-9ddc-6b5adbe06fcf",
-      "subscription_id": "c52fdecd-f36f-49fd-b8e7-8d0a490e2977",
-
+      "client_id": "{{user `azure_client_id`}}",
+      "client_secret": "{{user `azure_client_secret`}}",
+      "tenant_id": "{{user `azure_tenant_id`}}",
+      "subscription_id": "{{user `azure_subscription_id`}}",
       "managed_image_resource_group_name": "rob-rg",
-      "managed_image_name": "rob-packer-image7",
-
+      "managed_image_name": "rob-packer-image",
       "os_type": "Linux",
       "image_publisher": "Canonical",
       "image_offer": "UbuntuServer",
       "image_sku": "18.04-LTS",
-
       "location": "UK South",
       "vm_size": "Standard_B1ls"
     }

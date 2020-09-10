@@ -1,83 +1,66 @@
-3. Deploy a policy - COMPLETED!
+By Rob Foster
 
-Create policy definitition:
-az policy definition create --name tagging-policy --mode indexed --rules policy.json
+Updated 10/09/2020
 
-Assign policy definition:
+# Introduction
+This is the first project for the DevOps Engineer for Microsoft Azure nanodegree program from [Udacity](https://udacity.com).
+
+### Dependencies
+1. Create an [Azure Account](https://portal.azure.com) 
+2. Install the [Azure command line interface](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest)
+3. Install [Packer](https://www.packer.io/downloads)
+4. Install [Terraform](https://www.terraform.io/downloads.html)
+
+# Instructions
+
+## Deploy a policy
+First we must create an azure policy that prevents resources from being created unless they have a tag.
+
+To create the policy definitition:
+```
+az policy definition create --name tagging-policy --mode indexed --rules ./policy/policy.json
+```
+To assign the policy definition:
+```
 az policy assignment create --policy tagging-policy --name tagging-policy
+```
 
+## Create a packer template
 
+Before running packer, create a resource group to contain your packer image:
+```
+az group create -n rob-rg -l uksouth
+```
+Create a service principal to allow packer to build templates in azure:
+az ad sp create-for-rbac --query "{ client_id: appId, client_secret: password, tenant_id: tenant }"
 
-4. Packer template
+On the machine you are running packer from, create the following environment variables using the output from the above command, along with your subscription ID:
+CLIENT_ID
 
-Create image:
-packer build server.json
+CLIENT_SECRET
 
-Need to change the az cli stuff to env vars
+TENANT_ID
 
-WEBSERVER DOESN'T SEEM TO RUN AFTER BUILDING
+SUBSCRIPTION_ID
 
+Create your template:
+packer build ./packer/server.json
 
-5. Terraform template
+## Provision resources using terraform
 
+Change into the terraform directory:
+```
+cd terraform
+```
 Download plugins:
+```
 terraform init
+```
+Customize the deployment by setting variables in the terraform.tfvars file, and then provison the resources:
+```
+terraform apply
+```
 
 
-TERRAFORM MANUAL BUILD - THIS WORKS IN ROB-RG6!
-RG - rob-rg6
-VNET - rob-vnet1 - 10.2.0.0/16
-Subnet - rob-subnet1 - 10.2.0.0/24
-NSG - rob-nsg1 - NEEDS RULES. IS THIS FOR THE SUBNET OR THE NICS? SHOULD ALL NICS ATTACH TO IT?
-NIC - rob-vm189
-      VNET - rob-vnet1
-      Subnet - rob-subnet1
-      NSG - rob-nsg1
-PIP - rob-pip1
-      SKU: Standard
-      DNS Name Label: rob-udacity
-      Associated to rob-lb1
-      Availability Zone: Zone-redundant
-LB - rob-lb1
-      Type - public
-      SKU - Standard (REQUIRES NSG TO WORK!)
-      PIP - rob-pip1
-      LBFrontEnd -  LoadBalanderFrontEnd
-                    PIP - rob-pip1
-      BackendPools - rob-backendpool1 
-AVSet - rob-avset1
-VM1 - rob-vm1
-      AVSet - rob-avset1
-      AuthType: password
-      Username: adminuser
-      Password: Ymn$DJ5Igv#0U0d906HZ
-      InboundPorts: 22, 80
-      OSDiskType: Standard HDD
-      DataDisk: rob-vm1_DataDisk_0
-                SourceType: Empty
-                StorageType: Standard HDD
-                Size: 10GB
-      VNET: rob-vnet1
-      Subnet: rob-subnet1
-      PIP: none
-      NSG (for NIC):  Advanced
-                      rob-nsg1
-      LB Options: Azure Load Balancer
-                  LB: rob-lb1
-                  Backend Pool: rob-backendpool1
-      NIC: rob-vm189
-Disk -  rob-vm1_OsDisk_xxxxxxxxx
-        rob-vm1_DataDisk_0
-Health Probe -  roblb-health
-                Protocol: TCP
-                Port: 80
-                Interval: 5
-                Unhealthy Threshold: 2
-                Used by: rob-lbrule
-LBRule -  rob-lbrule
-          Frontend IP: LoadBalancerFrontEnd
-          Protocol: TCP
-          Port: 80
-          Backend port: 80
-          Backend Pool: rob-backendpool1
-          Health Probe: rob-health
+
+# Files
