@@ -29,7 +29,6 @@ resource "azurerm_subnet" "main" {
   resource_group_name  = azurerm_resource_group.main.name
   virtual_network_name = azurerm_virtual_network.main.name
   address_prefixes     = ["${var.subnet}"]
-  tags                 = local.tags
 }
 
 resource "azurerm_network_security_group" "main" {
@@ -51,7 +50,6 @@ resource "azurerm_network_security_rule" "http" {
   destination_address_prefix  = "*"
   resource_group_name         = azurerm_resource_group.main.name
   network_security_group_name = azurerm_network_security_group.main.name
-  tags                        = local.tags
 }
 
 resource "azurerm_public_ip" "main" {
@@ -90,7 +88,6 @@ resource "azurerm_lb_backend_address_pool" "main" {
   resource_group_name = azurerm_resource_group.main.name
   loadbalancer_id     = azurerm_lb.main.id
   name                = "${var.prefix}-backendpool"
-  tags                = local.tags
 }
 
 resource "azurerm_lb_probe" "main" {
@@ -98,7 +95,6 @@ resource "azurerm_lb_probe" "main" {
   loadbalancer_id     = azurerm_lb.main.id
   name                = "${var.prefix}-lbhealth"
   port                = 80
-  tags                = local.tags
 }
 
 resource "azurerm_lb_rule" "main" {

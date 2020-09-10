@@ -22,6 +22,7 @@
       "location": "UK South",
       "vm_size": "Standard_B1ls",
       "azure_tags": {
+        "environment": "dev",
         "project": "udacity",
         "owner": "Rob Foster",
         "image": "rob-packer-image"
