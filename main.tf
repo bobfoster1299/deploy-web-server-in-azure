@@ -10,10 +10,14 @@ locals {
   }
 }
 
-resource "azurerm_resource_group" "main" {
-  name     = "${var.prefix}-rg"
-  location = var.location
-  tags     = local.tags
+#resource "azurerm_resource_group" "main" {
+#  name     = "${var.prefix}-rg"
+#  location = var.location
+#  tags     = local.tags
+#}
+
+data "azurerm_resource_group" "main" {
+  name = "rob-rg"
 }
 
 resource "azurerm_virtual_network" "main" {
