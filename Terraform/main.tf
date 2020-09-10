@@ -203,7 +203,8 @@ resource "azurerm_network_interface" "main" {
 resource "azurerm_network_interface_backend_address_pool_association" "main" {
   count                   = var.number_of_vms
   network_interface_id    = element(azurerm_network_interface.main.*.id, count.index)
-  ip_configuration_name   = element(azurerm_network_interface.main.*.ip_configuration[0].name, count.index)
+  #ip_configuration_name   = element(azurerm_network_interface.main.*.ip_configuration[0].name, count.index)
+  ip_configuration_name   = element(azurerm_network_interface.main.*.ip_configuration.name, count.index)
   backend_address_pool_id = azurerm_lb_backend_address_pool.main.id
 }
 
