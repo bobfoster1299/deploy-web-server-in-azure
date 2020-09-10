@@ -4,9 +4,9 @@ provider "azurerm" {
 
 locals {
   tags = {
-    environment  = "${var.environment}"
-    project      = "${var.project}"  
-    owner        = "${var.owner}"
+    environment = "${var.environment}"
+    project     = "${var.project}"
+    owner       = "${var.owner}"
   }
 }
 
