@@ -75,3 +75,7 @@ Once your resources are no longer required, delete them:
 ```
 terraform destroy
 ```
+Finally, you can delete the resource group:
+```
+az group delete -n rob-rg
+```
