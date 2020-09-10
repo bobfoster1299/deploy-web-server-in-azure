@@ -21,7 +21,7 @@ az policy assignment create --policy tagging-policy --name tagging-policy
 
 ## Create a packer template
 
-Before running packer, create a resource group to contain your packer image:
+Before running packer, create a resource group to contain all the resources:
 ```
 az group create -n rob-rg -l uksouth
 ```
