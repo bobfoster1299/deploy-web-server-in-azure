@@ -20,7 +20,12 @@
       "image_offer": "UbuntuServer",
       "image_sku": "18.04-LTS",
       "location": "UK South",
-      "vm_size": "Standard_B1ls"
+      "vm_size": "Standard_B1ls",
+      "azure_tags": {
+        "project": "udacity",
+        "owner": "Rob Foster",
+        "image": "rob-packer-image"
+      }
     }
   ],
   "provisioners": [
