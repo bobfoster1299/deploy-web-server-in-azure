@@ -3,7 +3,7 @@ By Rob Foster
 Updated 10/09/2020
 
 # Introduction
-This is the first project for the DevOps Engineer for Microsoft Azure nanodegree program from [Udacity](https://udacity.com).
+This is my submission for the 'Deploying a Web Server in Azure' project as part of the  DevOps Engineer for Microsoft Azure nanodegree program from [Udacity](https://udacity.com).
 
 ### Dependencies
 1. Create an [Azure Account](https://portal.azure.com) 
