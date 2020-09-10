@@ -45,7 +45,10 @@ az ad sp create-for-rbac --query "{ client_id: appId, client_secret: password, t
 
 On the machine you are running packer from, set the following environment variables using the output from the above command, along with your subscription ID:
 
-CLIENT_ID, CLIENT_SECRET, TENANT_ID, SUBSCRIPTION_ID
+- CLIENT_ID
+- CLIENT_SECRET
+- TENANT_ID
+- SUBSCRIPTION_ID
 
 Customize the values in packer.json, then create the template in azure:
 ```
