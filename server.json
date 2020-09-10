@@ -33,9 +33,9 @@
     {
       "type": "shell",
       "inline": [
-        "apt update",
+        "sudo apt update",
         "sudo apt install apache2 -y",
-        "sudo bash -c 'echo Hello World!  > index.html'"
+        "sudo bash -c 'echo Hello World! > /var/www/html/index.html'"
       ]
     }
   ]
