@@ -3,12 +3,25 @@ By Rob Foster
 Updated 10/09/2020
 
 # Introduction
-This is my submission for the 'Deploying a Web Server in Azure' project as part of the  DevOps Engineer for Microsoft Azure nanodegree program from [Udacity](https://udacity.com).
+This is my submission for the 'Deploying a Web Server in Azure' project as part of the 'DevOps Engineer for Microsoft Azure' nanodegree program from [Udacity](https://udacity.com).
+
+It does the following:
+- Deploys an azure policy that prevents resources from being created within the subscription unless they have a tag.
+- Create a VM template using packer.
+- Uses terraform to provision the following resources in azure:
+  - Availability set
+  - OS disks
+  - Data disks
+  - Load balancer
+  - Network interfaces
+  - Network security groups
+  - Public IP address
+  - Virtual Machines
+  - Virtual Network
 
 # Instructions
 
-## Deploy a policy
-First we must create an azure policy that prevents resources from being created unless they have a tag.
+## Deploy the policy
 
 To create the policy definitition:
 ```
@@ -49,11 +62,17 @@ Download plugins:
 ```
 terraform init
 ```
-Customize the deployment by setting variables in the terraform.tfvars file, and then provison the resources:
+Customize the deployment by setting variables in the terraform.tfvars file. By changing the number_of_vms variable you can select how many VMs you want tou build.
+
+Provison the resources:
 ```
 terraform apply
 ```
-
-
-
-# Files
+Once you are finished with your packer image you can delete it:
+```
+az image delete --name rob-packer-image7 --resource-group rob-rg
+```
+Once your resources are no longer required, delete them:
+```
+terraform destroy
+```
