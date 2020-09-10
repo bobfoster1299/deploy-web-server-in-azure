@@ -33,9 +33,8 @@
     {
       "type": "shell",
       "inline": [
-        "sudo apt-get install apache2 -y",
-        "sudo bash -c 'echo HelloWorld! > /var/www/html/index.html'",
-        "sudo systemctl enable apache2"
+        "echo 'Hello, World!' > index.html",
+        "nohup busybox httpd -f -p 80 &"
       ],
       "inline_shebang": "/bin/sh -x"
     }
