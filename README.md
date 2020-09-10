@@ -5,12 +5,6 @@ Updated 10/09/2020
 # Introduction
 This is my submission for the 'Deploying a Web Server in Azure' project as part of the  DevOps Engineer for Microsoft Azure nanodegree program from [Udacity](https://udacity.com).
 
-### Dependencies
-1. Create an [Azure Account](https://portal.azure.com) 
-2. Install the [Azure command line interface](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest)
-3. Install [Packer](https://www.packer.io/downloads)
-4. Install [Terraform](https://www.terraform.io/downloads.html)
-
 # Instructions
 
 ## Deploy a policy
