@@ -13,6 +13,8 @@ az policy assignment create --policy tagging-policy --name tagging-policy
 Create image:
 packer build server.json
 
+Need to change the az cli stuff to env vars
+
 WEBSERVER DOESN'T SEEM TO RUN AFTER BUILDING
 
 
