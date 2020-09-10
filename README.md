@@ -69,7 +69,7 @@ terraform apply
 ```
 Once you are finished with your packer image you can delete it:
 ```
-az image delete --name rob-packer-image7 --resource-group rob-rg
+az image delete --name rob-packer-image --resource-group rob-rg
 ```
 Once your resources are no longer required, delete them:
 ```
