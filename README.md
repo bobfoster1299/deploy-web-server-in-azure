@@ -7,7 +7,7 @@ This is my submission for the 'Deploying a Web Server in Azure' project as part 
 
 It does the following:
 - Deploys an azure policy that prevents resources from being created within the subscription unless they have a tag.
-- User packer to create a VM template which hosts a website that displays the message 'Hello World!'.
+- Uses packer to create a VM template which hosts a website that displays the message 'Hello World!'.
 - Uses terraform to provision the following resources in azure:
   - Availability set
   - OS disks
