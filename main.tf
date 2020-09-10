@@ -107,7 +107,6 @@ resource "azurerm_lb_rule" "main" {
   frontend_ip_configuration_name = "${var.prefix}-lbfrontend"
   backend_address_pool_id        = azurerm_lb_backend_address_pool.main.id
   probe_id                       = azurerm_lb_probe.main.id
-  tags                           = local.tags
 }
 
 data "azurerm_image" "packer-image" {
@@ -175,12 +174,10 @@ resource "azurerm_network_interface_backend_address_pool_association" "main" {
   network_interface_id    = element(azurerm_network_interface.main.*.id, count.index)
   ip_configuration_name   = "${var.prefix}-ipconfig"
   backend_address_pool_id = azurerm_lb_backend_address_pool.main.id
-  tags                    = local.tags
 }
 
 resource "azurerm_network_interface_security_group_association" "main" {
   count                     = var.number_of_vms
   network_interface_id      = element(azurerm_network_interface.main.*.id, count.index)
   network_security_group_id = azurerm_network_security_group.main.id
-  tags                      = local.tags
 }
