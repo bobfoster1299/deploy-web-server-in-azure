@@ -16,8 +16,9 @@ locals {
 #  tags     = local.tags
 #}
 
+# Reference existing resource group
 data "azurerm_resource_group" "main" {
-  name = "rob-rg"
+  name = "${var.prefix}-rg"
 }
 
 resource "azurerm_virtual_network" "main" {
