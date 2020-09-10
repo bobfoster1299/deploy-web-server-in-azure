@@ -25,7 +25,7 @@ It does the following:
 
 To create the policy definitition:
 ```
-az policy definition create --name tagging-policy --mode indexed --rules ./policy/policy.json
+az policy definition create --name tagging-policy --mode indexed --rules policy.json
 ```
 To assign the policy definition:
 ```
@@ -49,20 +49,16 @@ CLIENT_ID, CLIENT_SECRET, TENANT_ID, SUBSCRIPTION_ID
 
 Create the template in azure:
 ```
-packer build ./packer/server.json
+packer build packer.json
 ```
 
 ## Provision resources using terraform
 
-Change into the terraform directory:
-```
-cd terraform
-```
 Download plugins:
 ```
 terraform init
 ```
-Customize the deployment by setting variables in the terraform.tfvars file. By changing the number_of_vms variable you can select how many VMs you want tou build.
+Customize the deployment by setting variables in the terraform.tfvars file. By changing the number_of_vms variable you can select how many VMs you want to build.
 
 Provison the resources:
 ```

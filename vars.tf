@@ -41,10 +41,15 @@ variable "environment" {
 
 variable "project" {
   description = "Project tag"
-  default     = "udacity"
+  default     = "deploy-web-server-in-azure"
 }
 
 variable "owner" {
   description = "Owner tag"
   default     = "Rob Foster"
+}
+
+variable "image" {
+  description = "The VM image to deploy"
+  default     = "rob-packer-image"
 }

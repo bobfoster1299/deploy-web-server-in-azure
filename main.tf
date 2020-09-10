@@ -114,6 +114,11 @@ resource "azurerm_lb_rule" "main" {
   tags                           = local.tags
 }
 
+data "azurerm_image" "packer-image" {
+  name                = var.image
+  resource_group_name = azurerm_resource_group.main.name
+}
+
 resource "azurerm_linux_virtual_machine" "main" {
   count                           = var.number_of_vms
   name                            = "${var.prefix}-vm-${count.index}"
@@ -126,13 +131,7 @@ resource "azurerm_linux_virtual_machine" "main" {
   disable_password_authentication = false
   availability_set_id             = azurerm_availability_set.main.id
   tags                            = local.tags
-
-  source_image_reference {
-    publisher = "Canonical"
-    offer     = "UbuntuServer"
-    sku       = "18.04-LTS"
-    version   = "latest"
-  }
+  source_image_id                 = data.azurerm_image.packer-image.id
 
   os_disk {
     name                 = "${var.prefix}-osdisk-${count.index}"
