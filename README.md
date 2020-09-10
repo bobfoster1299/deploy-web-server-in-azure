@@ -31,6 +31,7 @@ az ad sp create-for-rbac --query "{ client_id: appId, client_secret: password, t
 ```
 
 On the machine you are running packer from, create the following environment variables using the output from the above command, along with your subscription ID:
+
 CLIENT_ID
 
 CLIENT_SECRET
