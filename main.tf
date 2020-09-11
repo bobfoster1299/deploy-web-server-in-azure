@@ -37,20 +37,6 @@ resource "azurerm_network_security_group" "main" {
   tags                = local.tags
 }
 
-resource "azurerm_network_security_rule" "http" {
-  name                        = "AllowHTTP"
-  priority                    = 120
-  direction                   = "Inbound"
-  access                      = "Allow"
-  protocol                    = "TCP"
-  source_port_range           = "*"
-  destination_port_range      = "80"
-  source_address_prefix       = "*"
-  destination_address_prefix  = "*"
-  resource_group_name         = data.azurerm_resource_group.main.name
-  network_security_group_name = azurerm_network_security_group.main.name
-}
-
 resource "azurerm_public_ip" "main" {
   name                = "${var.prefix}-pip"
   resource_group_name = data.azurerm_resource_group.main.name
