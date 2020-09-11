@@ -50,7 +50,24 @@ On the machine you are running packer from, set the following environment variab
 - TENANT_ID
 - SUBSCRIPTION_ID
 
-Customize the values in server.json, then create the template in azure:
+Customize the folllowing values in server.json:
+- managed_image_resource_group_name - The name of the resource group you created in azure
+- managed_image_name - The name to give to your template
+- os_type - The OS type of the base image
+- image_publisher - The publisher of the base image
+- image_offer -  The offer of the base image
+- image_sku - The SKU of the base image
+- location - The region of the image
+- vm_size - The size of the VM
+- azure_tags
+- environment:
+- - project - Project tag
+- - owner - Owner tag
+- - image - Image tag
+- provisioners:
+- - inline - The commands to execute on your template
+
+Create the template in azure:
 ```
 packer build server.json
 ```
@@ -62,6 +79,19 @@ Download plugins:
 terraform init
 ```
 Customize the deployment by setting variables in the terraform.tfvars file. By changing the number_of_vms variable you can select how many VMs you want to build.
+
+The following settings can be customized by editing the variables in the terraform.tfvars file:
+- prefix - The prefix which should be used for all resources in this deployment
+- location - The azure region in which all resources in this deployment should be created
+- number_of_vms - Number of VMs to provision
+- admin_username - The admin username for the VMs
+- admin_password - The admin password for the VMs
+- address_space - VNET address space
+- subnet - Subnet address space"
+- environment - Environment tag, e.g. prod, dev
+- project - Project tag
+- owner - Owner tag
+- image - The VM image to deploy
 
 Provison the resources:
 ```
