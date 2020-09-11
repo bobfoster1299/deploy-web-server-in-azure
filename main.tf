@@ -37,23 +37,24 @@ resource "azurerm_network_security_group" "main" {
   tags                = local.tags
 }
 
-resource "azurerm_network_security_rule" "http" {
-  name                        = "AllowTrafficWithinSubnet"
+# allow inbound traffic within VNET
+resource "azurerm_network_security_rule" "vnet" {
+  name                        = "AllowTrafficWithinVNET"
   priority                    = 120
   direction                   = "Inbound"
   access                      = "Allow"
   protocol                    = "TCP"
   source_port_range           = "*"
   destination_port_range      = "*"
-  source_address_prefix       = "10.4.0.0/24"
-  destination_address_prefix  = "10.4.0.0/24"
+  source_address_prefix       = "10.4.0.0/16"
+  destination_address_prefix  = "10.4.0.0/16"
   resource_group_name         = data.azurerm_resource_group.main.name
   network_security_group_name = azurerm_network_security_group.main.name
 }
 
-
-resource "azurerm_network_security_rule" "blockinbound" {
-  name                        = "BlockAllInbound"
+# block inbound traffic from internet
+resource "azurerm_network_security_rule" "blockinternet" {
+  name                        = "BlockAllInternet"
   priority                    = 130
   direction                   = "Inbound"
   access                      = "Deny"
