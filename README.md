@@ -79,17 +79,17 @@ Download plugins:
 terraform init
 ```
 The following settings can be customized by editing the variables in the terraform.tfvars file:
-- prefix - The prefix which should be used for all resources in this deployment
+- prefix - The prefix which should be used for the names of all resources in this deployment
 - location - The azure region in which all resources in this deployment should be created
 - number_of_vms - Number of VMs to provision
 - admin_username - The admin username for the VMs
 - admin_password - The admin password for the VMs
 - address_space - VNET address space
-- subnet - Subnet address space"
+- subnet - Subnet address space
 - environment - Environment tag, e.g. prod, dev
 - project - Project tag
 - owner - Owner tag
-- image - The VM image to deploy
+- image - The VM image to deploy (should match the name of the image created by packer)
 
 Provison the resources:
 ```
