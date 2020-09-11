@@ -78,8 +78,6 @@ Download plugins:
 ```
 terraform init
 ```
-Customize the deployment by setting variables in the terraform.tfvars file. By changing the number_of_vms variable you can select how many VMs you want to build.
-
 The following settings can be customized by editing the variables in the terraform.tfvars file:
 - prefix - The prefix which should be used for all resources in this deployment
 - location - The azure region in which all resources in this deployment should be created
