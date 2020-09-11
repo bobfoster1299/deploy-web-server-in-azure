@@ -60,7 +60,7 @@ Customize the folllowing values in server.json:
 - location - The region of the image
 - vm_size - The size of the VM
 - azure_tags
-- environment:
+  - environment: Environment tag, e.g. prod, dev
   - project - Project tag
   - owner - Owner tag
   - image - Image tag
