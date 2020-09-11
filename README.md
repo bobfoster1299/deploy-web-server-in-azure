@@ -1,6 +1,6 @@
 By Rob Foster
 
-Updated 10/09/2020
+Updated 11/09/2020
 
 # Introduction
 This is my submission for the 'Deploying a Web Server in Azure' project as part of the 'DevOps Engineer for Microsoft Azure' nanodegree program from [Udacity](https://udacity.com).
@@ -50,7 +50,7 @@ On the machine you are running packer from, set the following environment variab
 - TENANT_ID
 - SUBSCRIPTION_ID
 
-Customize the following values in server.json:
+Customize the following values in [server.json](server.json):
 - managed_image_resource_group_name - The name of the resource group you created in azure
 - managed_image_name - The name to give to your template
 - os_type - The OS type of the base image
@@ -78,7 +78,7 @@ Download plugins:
 ```
 terraform init
 ```
-The following settings can be customized by editing the variables in the terraform.tfvars file:
+The following settings can be customized by editing the variables in the [terraform.tfvars](terraform.tfvars) file:
 - prefix - The prefix which should be used for the names of all resources in this deployment
 - location - The azure region in which all resources in this deployment should be created
 - number_of_vms - Number of VMs to provision
