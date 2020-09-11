@@ -61,11 +61,11 @@ Customize the folllowing values in server.json:
 - vm_size - The size of the VM
 - azure_tags
 - environment:
-- - project - Project tag
-- - owner - Owner tag
-- - image - Image tag
+  - project - Project tag
+  - owner - Owner tag
+  - image - Image tag
 - provisioners:
-- - inline - The commands to execute on your template
+  - inline - The commands to execute on your template
 
 Create the template in azure:
 ```
