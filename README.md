@@ -50,7 +50,7 @@ On the machine you are running packer from, set the following environment variab
 - TENANT_ID
 - SUBSCRIPTION_ID
 
-Customize the folllowing values in server.json:
+Customize the following values in server.json:
 - managed_image_resource_group_name - The name of the resource group you created in azure
 - managed_image_name - The name to give to your template
 - os_type - The OS type of the base image
@@ -59,7 +59,7 @@ Customize the folllowing values in server.json:
 - image_sku - The SKU of the base image
 - location - The region of the image
 - vm_size - The size of the VM
-- azure_tags
+- azure_tags:
   - environment: Environment tag, e.g. prod, dev
   - project - Project tag
   - owner - Owner tag
