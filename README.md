@@ -34,6 +34,11 @@ az policy assignment create --policy tagging-policy --name tagging-policy
 
 ## Create a template using packer
 
+Login to azure:
+```
+az login
+```
+
 Before running packer, create a resource group to contain all the resources:
 ```
 az group create -n rob-rg -l uksouth
